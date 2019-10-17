@@ -15,10 +15,15 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js' },
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.1.3/vue-router.min.js' },
+      // { src: 'https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/index.js' },
+      // { src: 'https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/locale/en.min.js' },
       { src: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/theme-chalk/index.css' }
     ]
   },
   /*
@@ -29,7 +34,7 @@ export default {
   ** Global CSS
   */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    // 'element-ui/lib/theme-chalk/index.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -52,11 +57,33 @@ export default {
   ** Build configuration
   */
   build: {
+    // html: {
+    //   minify: {
+    //     collapseBooleanAttributes: false,
+    //     decodeEntities: false,
+    //     minifyCSS: false,
+    //     minifyJS: false,
+    //     processConditionalComments: false,
+    //     removeEmptyAttributes: false,
+    //     removeRedundantAttributes: false,
+    //     trimCustomFragments: false,
+    //     useShortDoctype: false
+    //   }
+    // },
+    // analyze: true,
     transpile: [/^element-ui/],
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
+        config.externals = {
+          vue: "Vue",
+          // vuex: "Vuex",
+          // "element-ui": "Element",
+          // 'element-ui/lib/locale/lang/en': 'locale',
+          "vue-router": "VueRouter"
+        };
+        
+      }
     }
   }
-}

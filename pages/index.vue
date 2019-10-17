@@ -1,15 +1,17 @@
 <template>
   <div class="container">
-    <el-button @click="check">Test</el-button>
+    <el-row>
+      <el-col :span="24">
+        <el-button @click="check">Test</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 export default {
-  components: {
-  },
-  computed: {
-  },
+  components: {},
+  computed: {},
   methods: {
     check() {
       this.$sockets.socket.send("ls");
@@ -19,7 +21,7 @@ export default {
     const socket = io("localhost:3000");
     this.$sockets.init(socket);
   }
-}
+};
 </script>
 
 <style>
