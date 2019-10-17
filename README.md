@@ -17,6 +17,9 @@ $ yarn start
 
 # generate static project
 $ yarn generate
+
+# run websocket server
+$ DEBUG=autorclonewebserver:* yarn run start_server
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
