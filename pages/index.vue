@@ -5,14 +5,19 @@
 </template>
 
 <script>
-
 export default {
   components: {
   },
+  computed: {
+  },
   methods: {
     check() {
-
+      this.$sockets.socket.send("ls");
     }
+  },
+  mounted() {
+    const socket = io("localhost:3000");
+    this.$sockets.init(socket);
   }
 }
 </script>
