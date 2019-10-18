@@ -2,6 +2,12 @@
 
 > check rclone status in web
 
+## Roadmaps
+
+- [x] Init project and test communicating
+- [ ] Visualized rclone status in webpage
+- [ ] Config and start rclone tasks in web
+
 ## Build Setup
 
 ``` bash
