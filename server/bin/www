@@ -8,7 +8,7 @@ var app = require('../app');
 var debug = require('debug')('autorclonewebserver:server');
 var http = require('http');
 
-var websocket = require("../websocket");
+var rcserver = require("../rcserver");
 
 /**
  * Get port from environment and store in Express.
@@ -22,12 +22,8 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-const io = require('socket.io')(server);
-app.set("io", io);
-websocket(io);
-// io.on("connection", socket => {
-//   socket.id
-// })
+app.set("rclone_server", rcserver);
+rcserver.start_rclone();
 
 /**
  * Listen on provided port, on all network interfaces.
