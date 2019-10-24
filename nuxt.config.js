@@ -1,3 +1,4 @@
+import config from "config";
 
 export default {
   mode: 'spa',
@@ -19,7 +20,7 @@ export default {
       // { src: 'https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.1.3/vue-router.min.js' },
       // { src: 'https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/index.js' },
       // { src: 'https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/locale/en.min.js' },
-      { src: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js' }
+      // { src: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -29,19 +30,19 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#f7f7f7' },
   /*
   ** Global CSS
   */
   css: [
-    // 'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/sockets'
+    '@/plugins/api',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -52,7 +53,17 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/proxy'
   ],
+  proxy: {
+    '/rc_api': {
+      target: `http://localhost:${config.get("port")}`,
+      // pathRewrite: {
+      //   '^/api' : '/'
+      //   }
+      // }
+    }
+  },
   /*
   ** Build configuration
   */

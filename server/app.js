@@ -3,6 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var proxy = require('http-proxy-middleware');
+var config = require("config");
 
 var indexRouter = require('./routes/index');
 
@@ -15,8 +16,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
-  '/rc',
-  proxy({ target: 'localhost:5572', changeOrigin: true })
+  '/rc_api',
+  proxy({
+    target: `http://127.0.0.1:${config.get("rclone_port")}`, changeOrigin: true })
 );
 app.use('/', indexRouter);
 

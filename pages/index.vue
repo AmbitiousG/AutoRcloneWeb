@@ -1,106 +1,115 @@
 <template>
   <div class="container">
-    <el-row>
-      <el-col :span="24">
-        <div class="rclone-status">
-          <span class="rclone-status-dot"><span class="dot" :class="rcloneClass"></span></span>
-          <span class="rclone-status-txt">{{rcloneStatus}}</span>
-        </div>
+    <el-row class="tac">
+      <el-col class="side">
+        <el-menu
+          :default-active="`${menuIndex}`"
+          @select="selectMenu"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <!-- <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title">分组一</template>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="分组2">
+              <el-menu-item index="1-3">选项3</el-menu-item>
+            </el-menu-item-group>
+            <el-submenu index="1-4">
+              <template slot="title">选项4</template>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>
+          </el-submenu> -->
+          <el-menu-item index="1">
+            <i class="el-icon-menu"></i>
+            <span slot="title">Dashboard</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="3" disabled>
+            <i class="el-icon-document"></i>
+            <span slot="title">导航三</span>
+          </el-menu-item> -->
+          <el-menu-item index="2">
+            <i class="el-icon-setting"></i>
+            <span slot="title">Setting</span>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col class="main">
+        <transition name="fade" mode="out-in">
+          <component :is="mainComp" :key="menuIndex"></component>
+        </transition>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import {
-  Socket_Connecting,
-  Socket_Connected,
-  Rclone_Status_Checking,
-  Rclone_Status_Stopped,
-  Rclone_Status_Running
-} from "../utils/const";
-import { MessageType_RcloneStatus } from "../utils/messageTypes";
+// import {
+//   Socket_Connecting,
+//   Socket_Connected,
+//   Rclone_Status_Checking,
+//   Rclone_Status_Stopped,
+//   Rclone_Status_Running
+// } from "../utils/const";
+// import { MessageType_RcloneStatus } from "../utils/messageTypes";
+import dashboard from "../components/dashboard";
+import setting from "../components/setting";
 export default {
   data() {
     return {
-      status: Rclone_Status_Checking
+      menuIndex: 1
     };
   },
-  components: {},
+  components: {
+    dashboard,
+    setting
+  },
   computed: {
-    rcloneStopped() {
-      return this.status == Rclone_Status_Stopped;
-    },
-    rcloneClass() {
-      if (this.status == Rclone_Status_Checking) return "gray";
-      return this.rcloneStopped ? "red" : "green";
-    },
-    rcloneStatus() {
-      if (this.status == Rclone_Status_Checking) return "Checking Rclone Status...";
-      return this.rcloneStopped
-        ? "No rclone --rc tasks running"
-        : "Rclone running";
+    mainComp() {
+      return this.menuIndex == 1 ? dashboard : setting;
     }
   },
   methods: {
-    check() {
-      this.$sockets.socket.send("ls");
+    init() {
+      fetch(`${location.href}rc_api/core/stats`, {
+        method: "POST", // or 'PUT
+      });
     },
-    updateRcloneStatus({ running, data }) {
-      this.status = running ? Rclone_Status_Running : Rclone_Status_Stopped;
-      console.log(data);
-    }
+    selectMenu(index) {
+      this.menuIndex = index;
+    },
   },
   mounted() {
-    const socket = io("localhost:3000");
-    this.$sockets.init(socket);
-    this.$sockets.socket.on("message", ({ type, payload }) => {
-      switch (type) {
-        case MessageType_RcloneStatus:
-          this.updateRcloneStatus(payload);
-          break;
-        default:
-          break;
-      }
-    });
+    this.init();
   }
 };
 </script>
 
 <style>
 .container {
-  width: 800px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  min-height: 100vh;
-  padding: 20px;
-  box-shadow: 0 0 8px 8px #ccc;
+  /* min-height: 100vh; */
+  /* padding: 20px; */
+  /* box-shadow: 0 0 8px 8px #ccc; */
 }
-.rclone-status {
+.container .tac {
+  height: 100%;
   display: flex;
-  align-items: center;
-  padding: 5px 0;
 }
-.rclone-status-dot {
-  flex: 0 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.container .tac .side {
+  flex: 0 0 200px;
 }
-.rclone-status-dot .dot {
-  content: "";
-  display: block;
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
-  background-color: gray;
-}
-.rclone-status-dot .dot.red {
-  background-color: #c50000;
-}
-.rclone-status-dot .dot.green {
-  background-color: green;
-}
-.rclone-status-txt {
-  flex: 1 1 100%;
+.side .el-menu {
+  height: 100%;
 }
 </style>

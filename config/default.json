@@ -1,0 +1,6 @@
+{
+  "port": 3333,
+  "rclone_port": 5572,
+  "user": "rclone",
+  "pass": "rclone"
+}
